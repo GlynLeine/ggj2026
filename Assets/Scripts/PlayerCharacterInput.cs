@@ -11,7 +11,7 @@ public class PlayerCharacterInput : MonoBehaviour
 
     public bool analogMovement;
 
-    public bool cursorLocked { get; private set; } = true;
+    public bool cursorLocked { get; private set; } = false;
     public bool cursorInputLocked { get; private set; } = true;
 
     public void OnMove(InputValue value)

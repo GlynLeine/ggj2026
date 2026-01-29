@@ -22,7 +22,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayers;
 
     public Transform cameraTarget;
-
+    public Transform aimVisual;
+    
     private float m_speed;
     private float m_animationBlend;
     private float m_targetRotation;
@@ -33,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private bool m_grounded = true;
     private float m_fallTimeBuffer;
 
-    private float2 m_aimDirection;
+    private float3 m_aimDirection = math.forward();
     
     private int m_animIDSpeed;
     private int m_animIDGrounded;
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private Random m_rng;
     
-    public bool isCurrentDeviceMouse => m_playerInput.currentControlScheme == "KeyboardMouse";
+    public bool isCurrentDeviceMouse => m_playerInput.currentControlScheme == "Keyboard&Mouse";
 
     private void Awake()
     {
@@ -147,7 +148,7 @@ public class PlayerController : MonoBehaviour
         if (math.lengthsq(m_input.move) > math.EPSILON)
         {
             float3 inputDirection = math.normalize(new float3(m_input.move.x, 0.0f, m_input.move.y));
-            m_targetRotation = math.TAU + math.atan2(inputDirection.x, inputDirection.z) +
+            m_targetRotation = math.atan2(inputDirection.x, inputDirection.z) +
                                math.radians(m_mainCamera.transform.eulerAngles.y);
 
             float rotation = math.radians(Mathf.SmoothDampAngle(transform.eulerAngles.y, math.degrees(m_targetRotation),
@@ -156,15 +157,30 @@ public class PlayerController : MonoBehaviour
             transform.rotation = quaternion.Euler(0.0f, rotation, 0.0f);
         }
         
-        float3 targetDirection = math.normalize(math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward()));
+        float3 targetDirection = math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward());
 
         m_controller.Move(targetDirection * (m_speed * Time.deltaTime) +
                           new float3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
 
         if (math.lengthsq(m_input.aimInput) > math.EPSILON)
         {
-            m_aimDirection = math.normalize(m_input.aimInput);
+            float3 inputDirection;
+            if (isCurrentDeviceMouse)
+            {
+                inputDirection = m_mainCamera.ScreenToViewportPoint(m_input.aimInput);
+                inputDirection = math.normalize(new float3(inputDirection.x - 0.5f, 0f, inputDirection.y - 0.5f));
+            }
+            else
+            {
+                inputDirection = math.normalize(new float3(m_input.aimInput.x, 0.0f, m_input.aimInput.y));
+            }
+            
+            float aimAngle = math.atan2(inputDirection.x, inputDirection.z) +
+                             math.radians(m_mainCamera.transform.eulerAngles.y);
+            m_aimDirection = math.mul(quaternion.Euler(0.0f, aimAngle, 0.0f), math.forward());
         }
+        
+        aimVisual.forward = m_aimDirection;
         
         m_animator.SetFloat(m_animIDSpeed, m_animationBlend);
         m_animator.SetFloat(m_animIDMotionSpeed, inputMagnitude);
