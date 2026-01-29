@@ -1,37 +1,35 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerCharacterInput : MonoBehaviour
 {
-    [Header("Character Input Values")]
-    public Vector2 move;
-    public Vector2 look;
-    public bool jump;
-    public bool sprint;
+    public Vector2 move { get; private set; }
+    public Vector2 aimInput { get; private set; }
+    public bool dodge { get; private set; }
+    public bool sprint { get; private set; }
 
-    [Header("Movement Settings")]
     public bool analogMovement;
 
-    [Header("Mouse Cursor Settings")]
-    public bool cursorLocked = true;
-    public bool cursorInputForLook = true;
+    public bool cursorLocked { get; private set; } = true;
+    public bool cursorInputLocked { get; private set; } = true;
 
     public void OnMove(InputValue value)
     {
         MoveInput(value.Get<Vector2>());
     }
 
-    public void OnLook(InputValue value)
+    public void OnAim(InputValue value)
     {
-        if(cursorInputForLook)
+        if(cursorInputLocked)
         {
-            LookInput(value.Get<Vector2>());
+            CursorInput(value.Get<Vector2>());
         }
     }
 
-    public void OnJump(InputValue value)
+    public void OnDodge(InputValue value)
     {
-        JumpInput(value.isPressed);
+        DodgeInput(value.isPressed);
     }
 
     public void OnSprint(InputValue value)
@@ -44,14 +42,14 @@ public class PlayerCharacterInput : MonoBehaviour
         move = newMoveDirection;
     } 
 
-    public void LookInput(Vector2 newLookDirection)
+    public void CursorInput(Vector2 newLookDirection)
     {
-        look = newLookDirection;
+        aimInput = newLookDirection;
     }
 
-    public void JumpInput(bool newJumpState)
+    public void DodgeInput(bool newJumpState)
     {
-        jump = newJumpState;
+        dodge = newJumpState;
     }
 
     public void SprintInput(bool newSprintState)
@@ -64,8 +62,14 @@ public class PlayerCharacterInput : MonoBehaviour
         SetCursorState(cursorLocked);
     }
 
-    private void SetCursorState(bool newState)
+    public void SetCursorState(bool newState)
     {
-        Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+        cursorLocked = newState;
+        Cursor.lockState = cursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
+    public void LockCursorInput(bool locked)
+    {
+        cursorInputLocked = locked;
     }
 }

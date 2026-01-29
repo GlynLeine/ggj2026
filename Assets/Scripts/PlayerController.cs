@@ -1,7 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Random = UnityEngine.Random;
+using Unity.Mathematics;
+using Random = Unity.Mathematics.Random;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
@@ -25,14 +25,16 @@ public class PlayerController : MonoBehaviour
 
     private float m_speed;
     private float m_animationBlend;
-    private float m_targetRotation = 0.0f;
+    private float m_targetRotation;
     private float m_rotationVelocity;
     private float m_verticalVelocity;
-    private float m_terminalVelocity = 53.0f;
+    private readonly float m_terminalVelocity = 53.0f;
 
     private bool m_grounded = true;
     private float m_fallTimeBuffer;
 
+    private float2 m_aimDirection;
+    
     private int m_animIDSpeed;
     private int m_animIDGrounded;
     private int m_animIDFreeFall;
@@ -45,7 +47,11 @@ public class PlayerController : MonoBehaviour
     private PlayerCharacterInput m_input;
     private Camera m_mainCamera;
     private Quaternion m_cameraRotation;
+
+    private Random m_rng;
     
+    public bool isCurrentDeviceMouse => m_playerInput.currentControlScheme == "KeyboardMouse";
+
     private void Awake()
     {
         if (m_mainCamera == null)
@@ -56,6 +62,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        m_rng.InitState();
+        
         m_cameraRotation = cameraTarget.rotation;
         
         m_animator = GetComponent<Animator>();
@@ -104,18 +112,17 @@ public class PlayerController : MonoBehaviour
             m_verticalVelocity += gravity * Time.deltaTime;
         }
 
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset,
-            transform.position.z);
+        float3 spherePosition = new float3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
         m_grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
         m_animator.SetBool(m_animIDGrounded, m_grounded);
 
         float targetSpeed = movementSpeed;
-        if (m_input.move == Vector2.zero)
+        if (math.lengthsq(m_input.move) <= math.EPSILON)
         {
             targetSpeed = 0.0f;
         }
 
-        float currentHorizontalSpeed = new Vector3(m_controller.velocity.x, 0.0f, m_controller.velocity.z).magnitude;
+        float currentHorizontalSpeed = math.length(new float3(m_controller.velocity.x, 0.0f, m_controller.velocity.z));
 
         float speedOffset = 0.1f;
         float inputMagnitude = m_input.analogMovement ? m_input.move.magnitude : 1f;
@@ -136,24 +143,29 @@ public class PlayerController : MonoBehaviour
         {
             m_animationBlend = 0f;
         }
-
-        Vector3 inputDirection = new Vector3(m_input.move.x, 0.0f, m_input.move.y).normalized;
-
-        if (m_input.move != Vector2.zero)
+        
+        if (math.lengthsq(m_input.move) > math.EPSILON)
         {
-            m_targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                               m_mainCamera.transform.eulerAngles.y;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, m_targetRotation, ref m_rotationVelocity,
-                rotationSmoothTime);
+            float3 inputDirection = math.normalize(new float3(m_input.move.x, 0.0f, m_input.move.y));
+            m_targetRotation = math.TAU + math.atan2(inputDirection.x, inputDirection.z) +
+                               math.radians(m_mainCamera.transform.eulerAngles.y);
 
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            float rotation = math.radians(Mathf.SmoothDampAngle(transform.eulerAngles.y, math.degrees(m_targetRotation),
+                ref m_rotationVelocity, rotationSmoothTime));
+
+            transform.rotation = quaternion.Euler(0.0f, rotation, 0.0f);
         }
+        
+        float3 targetDirection = math.normalize(math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward()));
 
-        Vector3 targetDirection = Quaternion.Euler(0.0f, m_targetRotation, 0.0f) * Vector3.forward;
+        m_controller.Move(targetDirection * (m_speed * Time.deltaTime) +
+                          new float3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
 
-        m_controller.Move(targetDirection.normalized * (m_speed * Time.deltaTime) +
-                          new Vector3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
-
+        if (math.lengthsq(m_input.aimInput) > math.EPSILON)
+        {
+            m_aimDirection = math.normalize(m_input.aimInput);
+        }
+        
         m_animator.SetFloat(m_animIDSpeed, m_animationBlend);
         m_animator.SetFloat(m_animIDMotionSpeed, inputMagnitude);
     }
@@ -169,7 +181,7 @@ public class PlayerController : MonoBehaviour
         {
             if (footstepAudioClips.Length > 0)
             {
-                var index = Random.Range(0, footstepAudioClips.Length);
+                var index = m_rng.NextInt(0, footstepAudioClips.Length);
                 AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(m_controller.center), footstepAudioVolume);
             }
         }
