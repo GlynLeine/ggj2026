@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float dodgeDistance = 2.0f;
     public float dodgeTime = 0.25f;
     public float dodgeTimeout = 0.50f;
+    public float backwardDodgeDelay = 0.1f;
     [Range(0.0f, 0.3f)] public float rotationSmoothTime = 0.12f;
     public float speedChangeRate = 10.0f;
 
@@ -37,11 +38,16 @@ public class PlayerController : MonoBehaviour
     private bool m_grounded = true;
     private float m_dodgeTimeBuffer;
     private float m_fallTimeBuffer;
+    private float m_tmpTimeBuffer;
+    private bool m_tmpDodge;
 
     private float3 m_aimDirection = math.forward();
     private float3 m_dodgeDirection;
+    private float m_dodgeSign;
     
     private int m_animIDSpeed;
+    private int m_animIDDodge;
+    private int m_animIDDodgeDirection;
     private int m_animIDGrounded;
     private int m_animIDFreeFall;
     private int m_animIDMotionSpeed;
@@ -56,8 +62,8 @@ public class PlayerController : MonoBehaviour
     private Quaternion m_cameraRotation;
 
     private Random m_rng;
-    
-    public bool isCurrentDeviceMouse => m_playerInput.currentControlScheme == "Keyboard&Mouse";
+
+    private bool isCurrentDeviceMouse => m_playerInput.currentControlScheme == "Keyboard&Mouse";
 
     private void Awake()
     {
@@ -79,6 +85,8 @@ public class PlayerController : MonoBehaviour
         m_playerInput = GetComponent<PlayerInput>();
 
         m_animIDSpeed = Animator.StringToHash("Speed");
+        m_animIDDodge = Animator.StringToHash("Dodge");
+        m_animIDDodgeDirection = Animator.StringToHash("DodgeDirection");
         m_animIDGrounded = Animator.StringToHash("Grounded");
         m_animIDFreeFall = Animator.StringToHash("FreeFall");
         m_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
@@ -87,7 +95,7 @@ public class PlayerController : MonoBehaviour
         
         m_fallTimeBuffer = 0f;
         
-        Debug.Assert(dodgeTime < dodgeTimeout);
+        Debug.Assert(dodgeTime + backwardDodgeDelay  < dodgeTimeout);
     }
 
     // Update is called once per frame
@@ -146,12 +154,24 @@ public class PlayerController : MonoBehaviour
         float3 spherePosition = new float3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
         m_grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
         m_animator.SetBool(m_animIDGrounded, m_grounded);
+        
+        m_tmpTimeBuffer += Time.deltaTime;
 
-
-
+        if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Backward Dodge") || m_animator.GetCurrentAnimatorStateInfo(0).IsName("Forward Dodge"))
+        {
+            m_tmpDodge = true;
+        }
+        
+        if (m_tmpDodge && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Backward Dodge") && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Forward Dodge"))
+        {
+            Debug.Log(m_tmpTimeBuffer);
+            m_tmpDodge = false;
+        }
+        
         if (m_dodgeTimeBuffer < dodgeTimeout)
         {
             m_dodgeTimeBuffer += Time.deltaTime;
+            m_animator.SetBool(m_animIDDodge, false);
         }
         else if (m_grounded && m_input.dodge)
         {
@@ -159,18 +179,27 @@ public class PlayerController : MonoBehaviour
 
             m_dodgeDirection = -m_aimDirection;
             m_dodgeTimeBuffer = 0f;
-            //m_animator.SetBool(m_animIDDodge, true);
+            m_tmpTimeBuffer = 0f;
+            m_animator.SetBool(m_animIDDodge, true);
+            m_dodgeSign = math.sign(math.dot(m_dodgeDirection, transform.forward));
+            m_animator.SetFloat(m_animIDDodgeDirection, m_dodgeSign);
+            transform.forward = m_dodgeDirection * m_dodgeSign;
         }
         
         float inputMagnitude = m_input.analogMovement ? m_input.move.magnitude : 1f;
         float3 movement = float3.zero;
-        if (m_dodgeTimeBuffer < dodgeTime)
+        if (m_dodgeTimeBuffer < dodgeTimeout)
         {
-            movement = m_dodgeDirection * (dodgeDistance / dodgeTime) * Time.deltaTime;
+            if ((m_dodgeSign > 0f && m_dodgeTimeBuffer < dodgeTime) ||
+                (m_dodgeSign < 0f && m_dodgeTimeBuffer < (dodgeTime + backwardDodgeDelay) && m_dodgeTimeBuffer > backwardDodgeDelay))
+            {
+                movement = m_dodgeDirection * (dodgeDistance / dodgeTime) * Time.deltaTime;
+            }
+
             m_speed = 0f;
             m_animationBlend = 0f;
         }
-        else if (m_dodgeTimeBuffer >= dodgeTimeout)
+        else
         {
             float targetSpeed = movementSpeed;
             if (math.lengthsq(m_input.move) <= math.EPSILON)

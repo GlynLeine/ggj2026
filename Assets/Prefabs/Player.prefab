@@ -81,7 +81,7 @@ Animator:
   m_GameObject: {fileID: 4964348896996501086}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: dccc737097d08004b9acd6b9458e5c2e, type: 3}
-  m_Controller: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+  m_Controller: {fileID: 9100000, guid: bcbef3fcaca979d4dbdc2013e6e3906f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -131,9 +131,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   movementSpeed: 5.335
-  dodgeDistance: 2.6675
-  dodgeTime: 0.2
-  dodgeTimeout: 0.5
+  dodgeDistance: 4.268
+  dodgeTime: 0.6
+  dodgeTimeout: 0.8
+  backwardDodgeDelay: 0.1
   rotationSmoothTime: 0.12
   speedChangeRate: 10
   landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
