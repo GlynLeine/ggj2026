@@ -152,7 +152,7 @@ MonoBehaviour:
   groundedRadius: 0.28
   groundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   cameraTarget: {fileID: 83034259623819942}
   aimVisual: {fileID: 1533360172908954203}
 --- !u!114 &3938525429208712838

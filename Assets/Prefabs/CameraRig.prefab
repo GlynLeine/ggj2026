@@ -61,10 +61,10 @@ MonoBehaviour:
   Lens:
     FieldOfView: 40
     OrthographicSize: 7
-    NearClipPlane: 1
+    NearClipPlane: 0.01
     FarClipPlane: 500
     Dutch: 0
-    ModeOverride: 1
+    ModeOverride: 2
     PhysicalProperties:
       GateFit: 2
       SensorSize: {x: 21.946, y: 16.002}
