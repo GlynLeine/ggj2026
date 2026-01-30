@@ -47,9 +47,9 @@ public class PlayerCharacterInput : MonoBehaviour
         aimInput = newLookDirection;
     }
 
-    public void DodgeInput(bool newJumpState)
+    public void DodgeInput(bool newDodgeState)
     {
-        dodge = newJumpState;
+        dodge = newDodgeState;
     }
 
     public void SprintInput(bool newSprintState)

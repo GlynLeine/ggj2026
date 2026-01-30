@@ -8,6 +8,9 @@ using Random = Unity.Mathematics.Random;
 public class PlayerController : MonoBehaviour
 {
     public float movementSpeed = 5.335f;
+    public float dodgeDistance = 2.0f;
+    public float dodgeTime = 0.25f;
+    public float dodgeTimeout = 0.50f;
     [Range(0.0f, 0.3f)] public float rotationSmoothTime = 0.12f;
     public float speedChangeRate = 10.0f;
 
@@ -32,9 +35,11 @@ public class PlayerController : MonoBehaviour
     private readonly float m_terminalVelocity = 53.0f;
 
     private bool m_grounded = true;
+    private float m_dodgeTimeBuffer;
     private float m_fallTimeBuffer;
 
     private float3 m_aimDirection = math.forward();
+    private float3 m_dodgeDirection;
     
     private int m_animIDSpeed;
     private int m_animIDGrounded;
@@ -81,11 +86,33 @@ public class PlayerController : MonoBehaviour
         m_shaderIDPlayerPosition = Shader.PropertyToID("_Player_Position");
         
         m_fallTimeBuffer = 0f;
+        
+        Debug.Assert(dodgeTime < dodgeTimeout);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (math.lengthsq(m_input.aimInput) > math.EPSILON)
+        {
+            float3 inputDirection;
+            if (isCurrentDeviceMouse)
+            {
+                inputDirection = m_mainCamera.ScreenToViewportPoint(m_input.aimInput);
+                inputDirection = math.normalize(new float3(inputDirection.x - 0.5f, 0f, inputDirection.y - 0.5f));
+            }
+            else
+            {
+                inputDirection = math.normalize(new float3(m_input.aimInput.x, 0.0f, m_input.aimInput.y));
+            }
+            
+            float aimAngle = math.atan2(inputDirection.x, inputDirection.z) +
+                             math.radians(m_mainCamera.transform.eulerAngles.y);
+            m_aimDirection = math.mul(quaternion.Euler(0.0f, aimAngle, 0.0f), math.forward());
+        }
+        
+        aimVisual.forward = m_aimDirection;
+        
         if (m_grounded)
         {
             m_fallTimeBuffer = 0f;
@@ -120,70 +147,76 @@ public class PlayerController : MonoBehaviour
         m_grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
         m_animator.SetBool(m_animIDGrounded, m_grounded);
 
-        float targetSpeed = movementSpeed;
-        if (math.lengthsq(m_input.move) <= math.EPSILON)
+
+
+        if (m_dodgeTimeBuffer < dodgeTimeout)
         {
-            targetSpeed = 0.0f;
+            m_dodgeTimeBuffer += Time.deltaTime;
         }
+        else if (m_grounded && m_input.dodge)
+        {
+            m_input.DodgeInput(false);
 
-        float currentHorizontalSpeed = math.length(new float3(m_controller.velocity.x, 0.0f, m_controller.velocity.z));
-
-        float speedOffset = 0.1f;
+            m_dodgeDirection = -m_aimDirection;
+            m_dodgeTimeBuffer = 0f;
+            //m_animator.SetBool(m_animIDDodge, true);
+        }
+        
         float inputMagnitude = m_input.analogMovement ? m_input.move.magnitude : 1f;
-
-        if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+        float3 movement = float3.zero;
+        if (m_dodgeTimeBuffer < dodgeTime)
         {
-            m_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                Time.deltaTime * speedChangeRate);
-            m_speed = Mathf.Round(m_speed * 1000f) / 1000f;
-        }
-        else
-        {
-            m_speed = targetSpeed;
-        }
-
-        m_animationBlend = Mathf.Lerp(m_animationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
-        if (m_animationBlend < 0.01f)
-        {
+            movement = m_dodgeDirection * (dodgeDistance / dodgeTime) * Time.deltaTime;
+            m_speed = 0f;
             m_animationBlend = 0f;
         }
-        
-        if (math.lengthsq(m_input.move) > math.EPSILON)
+        else if (m_dodgeTimeBuffer >= dodgeTimeout)
         {
-            float3 inputDirection = math.normalize(new float3(m_input.move.x, 0.0f, m_input.move.y));
-            m_targetRotation = math.atan2(inputDirection.x, inputDirection.z) +
-                               math.radians(m_mainCamera.transform.eulerAngles.y);
-
-            float rotation = math.radians(Mathf.SmoothDampAngle(transform.eulerAngles.y, math.degrees(m_targetRotation),
-                ref m_rotationVelocity, rotationSmoothTime));
-
-            transform.rotation = quaternion.Euler(0.0f, rotation, 0.0f);
-        }
-        
-        float3 targetDirection = math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward());
-
-        m_controller.Move(targetDirection * (m_speed * Time.deltaTime) +
-                          new float3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
-
-        if (math.lengthsq(m_input.aimInput) > math.EPSILON)
-        {
-            float3 inputDirection;
-            if (isCurrentDeviceMouse)
+            float targetSpeed = movementSpeed;
+            if (math.lengthsq(m_input.move) <= math.EPSILON)
             {
-                inputDirection = m_mainCamera.ScreenToViewportPoint(m_input.aimInput);
-                inputDirection = math.normalize(new float3(inputDirection.x - 0.5f, 0f, inputDirection.y - 0.5f));
+                targetSpeed = 0.0f;
+            }
+
+            float currentHorizontalSpeed = math.length(new float3(m_controller.velocity.x, 0.0f, m_controller.velocity.z));
+
+            float speedOffset = 0.1f;
+
+            if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+            {
+                m_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
+                    Time.deltaTime * speedChangeRate);
+                m_speed = Mathf.Round(m_speed * 1000f) / 1000f;
             }
             else
             {
-                inputDirection = math.normalize(new float3(m_input.aimInput.x, 0.0f, m_input.aimInput.y));
+                m_speed = targetSpeed;
             }
-            
-            float aimAngle = math.atan2(inputDirection.x, inputDirection.z) +
-                             math.radians(m_mainCamera.transform.eulerAngles.y);
-            m_aimDirection = math.mul(quaternion.Euler(0.0f, aimAngle, 0.0f), math.forward());
+
+            m_animationBlend = Mathf.Lerp(m_animationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
+            if (m_animationBlend < 0.01f)
+            {
+                m_animationBlend = 0f;
+            }
+            if (math.lengthsq(m_input.move) > math.EPSILON)
+            {
+                float3 inputDirection = math.normalize(new float3(m_input.move.x, 0.0f, m_input.move.y));
+                m_targetRotation = math.atan2(inputDirection.x, inputDirection.z) +
+                                   math.radians(m_mainCamera.transform.eulerAngles.y);
+
+                float rotation = math.radians(Mathf.SmoothDampAngle(transform.eulerAngles.y,
+                    math.degrees(m_targetRotation),
+                    ref m_rotationVelocity, rotationSmoothTime));
+
+                transform.rotation = quaternion.Euler(0.0f, rotation, 0.0f);
+            }
+
+            movement = math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward()) * m_speed *
+                       Time.deltaTime;
         }
-        
-        aimVisual.forward = m_aimDirection;
+
+        m_controller.Move(movement  +
+                          new float3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
         
         m_animator.SetFloat(m_animIDSpeed, m_animationBlend);
         m_animator.SetFloat(m_animIDMotionSpeed, inputMagnitude);

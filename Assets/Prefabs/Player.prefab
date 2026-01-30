@@ -131,6 +131,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   movementSpeed: 5.335
+  dodgeDistance: 2.6675
+  dodgeTime: 0.2
+  dodgeTimeout: 0.5
   rotationSmoothTime: 0.12
   speedChangeRate: 10
   landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
