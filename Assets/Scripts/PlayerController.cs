@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private int m_animIDGrounded;
     private int m_animIDFreeFall;
     private int m_animIDMotionSpeed;
-    private int m_shaderIDPlayerDistance;
+    private int m_shaderIDPlayerPosition;
 
     private PlayerInput m_playerInput;
 
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
         m_animIDFreeFall = Animator.StringToHash("FreeFall");
         m_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
 
-        m_shaderIDPlayerDistance = Shader.PropertyToID("_Player_Distance");
+        m_shaderIDPlayerPosition = Shader.PropertyToID("_Player_Position");
         
         m_fallTimeBuffer = 0f;
     }
@@ -192,8 +192,7 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         cameraTarget.rotation = m_cameraRotation;
-        
-        Shader.SetGlobalFloat(m_shaderIDPlayerDistance, math.dot(m_mainCamera.transform.forward, cameraTarget.position - m_mainCamera.transform.position));
+        Shader.SetGlobalVector(m_shaderIDPlayerPosition, cameraTarget.position);
     }
 
     private void OnFootstep(AnimationEvent animationEvent)
