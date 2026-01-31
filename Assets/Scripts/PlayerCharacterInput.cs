@@ -6,8 +6,9 @@ public class PlayerCharacterInput : MonoBehaviour
 {
     public Vector2 move { get; private set; }
     public Vector2 aimInput { get; private set; }
+    public bool changeMask { get; private set; }
     public bool dodge { get; private set; }
-    public bool sprint { get; private set; }
+    public bool attack { get; private set; }
 
     public bool analogMovement;
 
@@ -27,14 +28,19 @@ public class PlayerCharacterInput : MonoBehaviour
         }
     }
 
+    public void OnChangeMask(InputValue value)
+    {
+        ChangeMaskInput(value.isPressed);
+    }
+    
     public void OnDodge(InputValue value)
     {
         DodgeInput(value.isPressed);
     }
 
-    public void OnSprint(InputValue value)
+    public void OnAttack(InputValue value)
     {
-        SprintInput(value.isPressed);
+        AttackInput(value.isPressed);
     }
 
     public void MoveInput(Vector2 newMoveDirection)
@@ -47,14 +53,19 @@ public class PlayerCharacterInput : MonoBehaviour
         aimInput = newLookDirection;
     }
 
-    public void DodgeInput(bool newJumpState)
+    public void ChangeMaskInput(bool newChangeMask)
     {
-        dodge = newJumpState;
+        changeMask = newChangeMask;
+    }
+    
+    public void DodgeInput(bool newDodgeState)
+    {
+        dodge = newDodgeState;
     }
 
-    public void SprintInput(bool newSprintState)
+    public void AttackInput(bool newAttackState)
     {
-        sprint = newSprintState;
+        attack = newAttackState;
     }
 		
     private void OnApplicationFocus(bool hasFocus)
