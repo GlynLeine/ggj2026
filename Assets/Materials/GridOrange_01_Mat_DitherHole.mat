@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GridOrange_01_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 8d45eb6e53fc1d94290e5f144e8cdd33, type: 3}
+  m_Name: GridOrange_01_Mat_DitherHole
+  m_Shader: {fileID: -6465566751694194690, guid: 3978415b3e366b44e91698c7e70a4cef, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -100,6 +100,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.477
     - _GlossyReflections: 0
+    - _Hole_Opacity: 0.5
     - _Hole_Power: 0.14
     - _Hole_Size: 1.5
     - _Metallic: 0
@@ -123,6 +124,7 @@ Material:
     - _BaseColor: {r: 1, g: 0.5985916, b: 0, a: 1}
     - _Color: {r: 1, g: 0.5985916, b: 0, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Hole_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Hole_Position: {r: 0.26, g: -0.41, b: 0, a: 0}
     - _Offset: {r: 0.004, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

@@ -67,6 +67,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Hole_Opacity: 0.5
     - _Hole_Power: 0.14
     - _Hole_Size: 1.5
     - _QueueControl: 0
@@ -74,6 +75,7 @@ Material:
     - _Smoothness: 0.477
     m_Colors:
     - _Color: {r: 1, g: 0.5985916, b: 0, a: 1}
+    - _Hole_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Hole_Position: {r: 0.26, g: -0.41, b: 0, a: 0}
     - _Offset: {r: 0.004, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
