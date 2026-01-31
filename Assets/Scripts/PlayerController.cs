@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Mathematics;
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour
     [Header("Misc")]
     public Transform cameraTarget;
     public Transform aimVisual;
+    public MeshRenderer aimRenderer;
+    public Transform aimSelect;
     public MeshRenderer attackPreview;
 
     private float m_speed;
@@ -108,6 +111,12 @@ public class PlayerController : MonoBehaviour
         {
             m_mainCamera = Camera.main;
         }
+        Shader.SetGlobalFloat("_EnableDither", 1f);
+    }
+
+    private void OnDestroy()
+    {
+        Shader.SetGlobalFloat("_EnableDither", 0f);
     }
 
     void Start()
@@ -181,6 +190,7 @@ public class PlayerController : MonoBehaviour
         }
         
         aimVisual.forward = m_aimDirection;
+        aimSelect.forward = math.mul(quaternion.Euler(0.0f, math.radians(m_mainCamera.transform.eulerAngles.y), 0.0f), math.forward());
     }
 
     void HandleFallingAndLanding()
@@ -283,6 +293,11 @@ public class PlayerController : MonoBehaviour
             }
 
             m_attackIndex = closestIndex;
+            aimSelect.gameObject.SetActive(true);
+        }
+        else
+        {
+            aimSelect.gameObject.SetActive(false);
         }
         
         if (!doMovement)
@@ -482,8 +497,8 @@ public class PlayerController : MonoBehaviour
         cameraTarget.rotation = m_cameraRotation;
         Shader.SetGlobalVector(m_shaderIDPlayerPosition, cameraTarget.position);
         
-        Shader.SetGlobalColor(m_shaderIDPlayerWeapon, m_attackIndex >= 0 ? attacks[m_attackIndex].color : Color.white);
-        Shader.SetGlobalFloat(m_shaderIDPlayerWeaponFill, m_attackIndex >= 0 ? attacks[m_attackIndex].timeBuffer / (attacks[m_attackIndex].duration + attacks[m_attackIndex].cooldown) : 0f);
+        aimRenderer.material.SetColor(m_shaderIDPlayerWeapon, m_attackIndex >= 0 ? attacks[m_attackIndex].color : Color.white);
+        aimRenderer.material.SetFloat(m_shaderIDPlayerWeaponFill, m_attackIndex >= 0 ? attacks[m_attackIndex].timeBuffer / (attacks[m_attackIndex].duration + attacks[m_attackIndex].cooldown) : 0f);
     }
 
     private void OnFootstep(AnimationEvent animationEvent)

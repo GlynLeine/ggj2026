@@ -64,7 +64,7 @@ MonoBehaviour:
     NearClipPlane: 0.01
     FarClipPlane: 500
     Dutch: 0
-    ModeOverride: 2
+    ModeOverride: 0
     PhysicalProperties:
       GateFit: 2
       SensorSize: {x: 21.946, y: 16.002}
