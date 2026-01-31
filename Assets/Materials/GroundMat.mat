@@ -111,6 +111,8 @@ Material:
     - _DstBlendAlpha: 0
     - _EdgeFade: 1
     - _EnvironmentReflections: 1
+    - _FractalFrequency: 0.3
+    - _FractalStrength: 0.233
     - _GlossMapScale: 1
     - _Glossiness: 0.477
     - _GlossyReflections: 1
@@ -119,13 +121,15 @@ Material:
     - _Hole_Size: 1
     - _Metallic: 0
     - _Mode: 0
-    - _NoiseScale: 0.49
+    - _NoiseBlendCenter: 0.233
+    - _NoiseBlendWidth: 0.1
+    - _NoiseScale: 0.06
     - _OcclusionStrength: 0
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.477
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -137,10 +141,10 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.2705882, g: 0.8784314, b: 0.58484614, a: 1}
-    - _Color: {r: 0.18783373, g: 0.5943396, b: 0.20351525, a: 1}
+    - _Color: {r: 0.32156864, g: 0.40784314, b: 0.27058825, a: 1}
     - _EmissionColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Hole_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Secondary_Color: {r: 0.26526576, g: 0.6132076, b: 0.112807065, a: 1}
+    - _Secondary_Color: {r: 0.27058825, g: 0.4392157, b: 0.35686275, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

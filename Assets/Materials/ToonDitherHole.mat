@@ -122,12 +122,13 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _EdgeFade: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossinessSource: 0
     - _GlossyReflections: 1
-    - _Hole_Opacity: 0.5
+    - _Hole_Opacity: 0.25
     - _Hole_Power: 0.14
     - _Hole_Size: 1.5
     - _Metallic: 0
