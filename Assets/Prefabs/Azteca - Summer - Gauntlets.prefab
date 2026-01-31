@@ -24,13 +24,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2023103014436563202}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000020861623}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 9.21, y: 4.702, z: 27.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2330107003627944712}
-  - {fileID: 6560457204688725313}
   - {fileID: 2009522554241672481}
   - {fileID: 1617554290710924447}
   - {fileID: 895442898651399008}
@@ -42,6 +40,68 @@ Transform:
   - {fileID: 5975848428698477144}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!1 &5491905882027609962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4935418879570328304}
+  - component: {fileID: 1951071494737939512}
+  - component: {fileID: 6556981832176400809}
+  m_Layer: 0
+  m_Name: Front Steps Slope
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4935418879570328304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5491905882027609962}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: -0.4309, y: 0.2998, z: 10.3762}
+  m_LocalScale: {x: 9.265722, y: 1.2124099, z: 0.19938856}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2009522554241672481}
+  m_LocalEulerAnglesHint: {x: -45, y: 0, z: 0}
+--- !u!33 &1951071494737939512
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5491905882027609962}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &6556981832176400809
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5491905882027609962}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &295205972018724400
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105,7 +165,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 111acb26ce4269d43b232fc90c155ef0, type: 2}
+      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
     - target: {fileID: 919132149155446097, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_04_Atlased
@@ -113,13 +173,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4240751690913778253}
   m_SourcePrefab: {fileID: 100100000, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
 --- !u!4 &257392618458225115 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
   m_PrefabInstance: {fileID: 295205972018724400}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &637718486217573217 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
+  m_PrefabInstance: {fileID: 295205972018724400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &4240751690913778253
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637718486217573217}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2907003532610387470, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
 --- !u!1001 &405500807816850159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -168,6 +258,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 802af55debcf0e44fbf19ae66525c237, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dbf898c9f9c4a2d46aa6336e23caeb61, type: 2}
     - target: {fileID: 919132149155446097, guid: 802af55debcf0e44fbf19ae66525c237, type: 3}
       propertyPath: m_Name
       value: Prop_Jungle_Temple_Ornament_Half_Sun_Spikes_Gold_01_Atlased
@@ -245,7 +339,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 111acb26ce4269d43b232fc90c155ef0, type: 2}
+      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
     - target: {fileID: 919132149155446097, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_02_Atlased
@@ -253,8 +347,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5630330155456880831}
   m_SourcePrefab: {fileID: 100100000, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
+--- !u!1 &515257807242729946 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
+  m_PrefabInstance: {fileID: 857929059139462283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &5630330155456880831
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515257807242729946}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1377899747396100212, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
 --- !u!4 &895442898651399008 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
@@ -323,7 +447,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 111acb26ce4269d43b232fc90c155ef0, type: 2}
+      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
     - target: {fileID: 919132149155446097, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_01_Atlased
@@ -331,13 +455,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1877311419863992724}
   m_SourcePrefab: {fileID: 100100000, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
 --- !u!4 &1617554290710924447 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
   m_PrefabInstance: {fileID: 1294798584554105716}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2105826048238917157 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
+  m_PrefabInstance: {fileID: 1294798584554105716}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1877311419863992724
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105826048238917157}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2117923115933679331, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
 --- !u!1001 &2047443898624148170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -396,7 +550,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: a134a6d5deecfd74a9292f3550f17ff1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4935418879570328304}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a134a6d5deecfd74a9292f3550f17ff1, type: 3}
       insertIndex: -1
@@ -433,80 +590,6 @@ MeshCollider:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a134a6d5deecfd74a9292f3550f17ff1, type: 3}
   m_PrefabInstance: {fileID: 2047443898624148170}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &2872322962186951907
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 9006155323871733372}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.5383103
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.2039999
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 7.648
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.7979999
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.626999
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 7.993605e-15
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.0000004768371
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.000000021855698
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: dbf898c9f9c4a2d46aa6336e23caeb61, type: 2}
-    - target: {fileID: 919132149155446097, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_Name
-      value: Ramp_100x100x200_Mesh
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
---- !u!4 &2330107003627944712 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-  m_PrefabInstance: {fileID: 2872322962186951907}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5942654549155257761
 PrefabInstance:
@@ -556,6 +639,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
     - target: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
       propertyPath: m_Name
       value: Prop_Jungle_Temple_Pillar_Block_Markings_01_Atlased
@@ -563,13 +650,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2445663941165357391}
   m_SourcePrefab: {fileID: 100100000, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
 --- !u!4 &6193071462518061642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
   m_PrefabInstance: {fileID: 5942654549155257761}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6825738508440641776 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
+  m_PrefabInstance: {fileID: 5942654549155257761}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2445663941165357391
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6825738508440641776}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4102048352408050928, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
 --- !u!1001 &6059059497859424334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -630,6 +747,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3bc155bd0f70be74aacca64055fd8cbd, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a1be9efa2e5bff648923cea90872ce32, type: 2}
     - target: {fileID: 919132149155446097, guid: 3bc155bd0f70be74aacca64055fd8cbd, type: 3}
       propertyPath: m_Name
       value: Prop_Jungle_Temple_Ornament_Sun_Disc_Gold_Gem_01_Atlased
@@ -692,6 +813,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
     - target: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
       propertyPath: m_Name
       value: Prop_Jungle_Temple_Pillar_Block_Markings_01_Atlased (1)
@@ -699,87 +824,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9150361713165123343}
   m_SourcePrefab: {fileID: 100100000, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
 --- !u!4 &5975848428698477144 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
   m_PrefabInstance: {fileID: 6153257401947211187}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &6665842487550198442
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 9006155323871733372}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.5383103
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.2039999
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 7.647995
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.7979999
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.8500004
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.000000119209275
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.0000000218557
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -180
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
-    - target: {fileID: 919132149155446097, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-      propertyPath: m_Name
-      value: Ramp_100x100x200_Mesh (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
---- !u!4 &6560457204688725313 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bfff06aaff363a847ad37bf592364e6b, type: 3}
-  m_PrefabInstance: {fileID: 6665842487550198442}
+--- !u!1 &6459757053322098914 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
+  m_PrefabInstance: {fileID: 6153257401947211187}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &9150361713165123343
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459757053322098914}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4102048352408050928, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
 --- !u!1001 &6716040099576178490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -843,7 +924,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 111acb26ce4269d43b232fc90c155ef0, type: 2}
+      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
     - target: {fileID: 919132149155446097, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_03_Atlased
@@ -851,8 +932,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7075389401227524951}
   m_SourcePrefab: {fileID: 100100000, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
+--- !u!1 &5905700371959470699 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
+  m_PrefabInstance: {fileID: 6716040099576178490}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &7075389401227524951
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5905700371959470699}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4058589995058318308, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
 --- !u!4 &6538826017115013329 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
