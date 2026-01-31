@@ -131,13 +131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   movementSpeed: 5.335
-  dodgeDistance: 4.268
-  dodgeTime: 0.6
-  dodgeTimeout: 0.8
-  backwardDodgeDelay: 0.1
   rotationSmoothTime: 0.12
   speedChangeRate: 10
-  landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
   footstepAudioClips:
   - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
   - {fileID: 8300000, guid: 85016e0f2b01da248b9663dd49a161b0, type: 3}
@@ -150,6 +145,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   footstepAudioVolume: 0.3
+  dodgeDistance: 4.268
+  dodgeTime: 0.6
+  dodgeTimeout: 0.8
+  backwardDodgeDelay: 0.1
   gravity: -15
   fallTimeout: 0.15
   groundedOffset: -0.14
@@ -157,6 +156,76 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 129
+  landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
+  attacks:
+  - duration: 0.1
+    cooldown: 0.15
+    aoe:
+      x: 1
+      y: 1
+    damage: 1
+    movement:
+      x: 0
+      y: 0
+      z: 0
+    value0: 0
+    selectionDirection:
+      x: 0
+      y: 1
+    color: {r: 0.013572444, g: 0.5754717, b: 0.013572444, a: 1}
+    unlocked: 0
+    timeBuffer: 0
+  - duration: 0.4
+    cooldown: 1
+    aoe:
+      x: 1
+      y: 1
+    damage: 1
+    movement:
+      x: 0
+      y: 0
+      z: 3
+    value0: 0
+    selectionDirection:
+      x: 1
+      y: 0
+    color: {r: 1, g: 0.711, b: 0, a: 1}
+    unlocked: 0
+    timeBuffer: 0
+  - duration: 0.2
+    cooldown: 0.4
+    aoe:
+      x: 1
+      y: 1
+    damage: 1
+    movement:
+      x: 0
+      y: 0
+      z: 0
+    value0: 0
+    selectionDirection:
+      x: -1
+      y: 0
+    color: {r: 0.5, g: 0, b: 1, a: 1}
+    unlocked: 0
+    timeBuffer: 0
+  - duration: 1
+    cooldown: 2
+    aoe:
+      x: 1
+      y: 1
+    damage: 1
+    movement:
+      x: 0
+      y: 0
+      z: 0
+    value0: 0
+    selectionDirection:
+      x: 0
+      y: -1
+    color: {r: 0.05873976, g: 0.5404425, b: 0.8301887, a: 1}
+    unlocked: 0
+    timeBuffer: 0
   cameraTarget: {fileID: 83034259623819942}
   aimVisual: {fileID: 1533360172908954203}
 --- !u!114 &3938525429208712838

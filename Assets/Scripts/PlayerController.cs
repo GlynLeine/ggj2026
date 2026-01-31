@@ -3,31 +3,55 @@ using UnityEngine.InputSystem;
 using Unity.Mathematics;
 using Random = Unity.Mathematics.Random;
 
+[System.Serializable]
+public class AttackInfo
+{
+    public float duration = 1f;
+    public float cooldown = 2f;
+    public float2 aoe = new float2(1f, 1f);
+    public float damage = 1f;
+    public float3 movement = new float3(0f, 0f, 0f);
+    public float value0;
+    public float2 selectionDirection = new float2(0f, 1f);
+    public Color color = new Color(0.5f, 0f, 1f);
+    [HideInInspector]
+    public bool unlocked = false;
+    [HideInInspector]
+    public float timeBuffer = 0f;
+}
+
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
     public float movementSpeed = 5.335f;
+    [Range(0.0f, 0.3f)] public float rotationSmoothTime = 0.12f;
+    public float speedChangeRate = 10.0f;
+    public AudioClip[] footstepAudioClips;
+    [Range(0, 1)] public float footstepAudioVolume = 0.5f;
+
+    [Header("Dodge")]
     public float dodgeDistance = 2.0f;
     public float dodgeTime = 0.25f;
     public float dodgeTimeout = 0.50f;
     public float backwardDodgeDelay = 0.1f;
-    [Range(0.0f, 0.3f)] public float rotationSmoothTime = 0.12f;
-    public float speedChangeRate = 10.0f;
-
-    public AudioClip landingAudioClip;
-    public AudioClip[] footstepAudioClips;
-    [Range(0, 1)] public float footstepAudioVolume = 0.5f;
-
+    
+    [Header("Falling & Landing")]
     public float gravity = -15.0f;
     public float fallTimeout = 0.15f;
     public float groundedOffset = -0.14f;
     public float groundedRadius = 0.28f;
     public LayerMask groundLayers;
+    public AudioClip landingAudioClip;
 
+    [Space(10)]
+    public AttackInfo[] attacks;
+
+    [Header("Misc")]
     public Transform cameraTarget;
     public Transform aimVisual;
-    
+
     private float m_speed;
     private float m_animationBlend;
     private float m_targetRotation;
@@ -38,12 +62,14 @@ public class PlayerController : MonoBehaviour
     private bool m_grounded = true;
     private float m_dodgeTimeBuffer;
     private float m_fallTimeBuffer;
-    private float m_tmpTimeBuffer;
-    private bool m_tmpDodge;
 
     private float3 m_aimDirection = math.forward();
+    private float2 m_aimInput;
     private float3 m_dodgeDirection;
     private float m_dodgeSign;
+
+    private bool m_isAttacking;
+    private int m_attackIndex = -1;
     
     private int m_animIDSpeed;
     private int m_animIDDodge;
@@ -51,7 +77,10 @@ public class PlayerController : MonoBehaviour
     private int m_animIDGrounded;
     private int m_animIDFreeFall;
     private int m_animIDMotionSpeed;
+    
     private int m_shaderIDPlayerPosition;
+    private int m_shaderIDPlayerWeapon;
+    private int m_shaderIDPlayerWeaponFill;
 
     private PlayerInput m_playerInput;
 
@@ -92,14 +121,23 @@ public class PlayerController : MonoBehaviour
         m_animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
 
         m_shaderIDPlayerPosition = Shader.PropertyToID("_Player_Position");
+        m_shaderIDPlayerWeapon = Shader.PropertyToID("_CurrentWeaponColor");
+        m_shaderIDPlayerWeaponFill = Shader.PropertyToID("_CurrentWeaponFill");
         
         m_fallTimeBuffer = 0f;
         
-        Debug.Assert(dodgeTime + backwardDodgeDelay  < dodgeTimeout);
+        Debug.Assert(dodgeTime + backwardDodgeDelay < dodgeTimeout);
+        Debug.Assert(attacks.Length == 4);
+
+        for (int i = 0; i < 4; ++i)
+        {
+            attacks[i].selectionDirection = math.normalize(attacks[i].selectionDirection);
+            attacks[i].unlocked = true;
+            attacks[i].timeBuffer = attacks[i].duration + attacks[i].cooldown;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void HandleAim()
     {
         if (math.lengthsq(m_input.aimInput) > math.EPSILON)
         {
@@ -114,13 +152,25 @@ public class PlayerController : MonoBehaviour
                 inputDirection = math.normalize(new float3(m_input.aimInput.x, 0.0f, m_input.aimInput.y));
             }
             
-            float aimAngle = math.atan2(inputDirection.x, inputDirection.z) +
-                             math.radians(m_mainCamera.transform.eulerAngles.y);
-            m_aimDirection = math.mul(quaternion.Euler(0.0f, aimAngle, 0.0f), math.forward());
+            m_aimInput = new float2(inputDirection.x, inputDirection.z);
+
+            if (!m_isAttacking)
+            {
+                float aimAngle = math.atan2(inputDirection.x, inputDirection.z) +
+                                 math.radians(m_mainCamera.transform.eulerAngles.y);
+                m_aimDirection = math.mul(quaternion.Euler(0.0f, aimAngle, 0.0f), math.forward());
+            }
+        }
+        else
+        {
+            m_aimInput = float2.zero;
         }
         
         aimVisual.forward = m_aimDirection;
-        
+    }
+
+    void HandleFallingAndLanding()
+    {
         if (m_grounded)
         {
             m_fallTimeBuffer = 0f;
@@ -154,40 +204,27 @@ public class PlayerController : MonoBehaviour
         float3 spherePosition = new float3(transform.position.x, transform.position.y - groundedOffset, transform.position.z);
         m_grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
         m_animator.SetBool(m_animIDGrounded, m_grounded);
-        
-        m_tmpTimeBuffer += Time.deltaTime;
+    }
 
-        if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Backward Dodge") || m_animator.GetCurrentAnimatorStateInfo(0).IsName("Forward Dodge"))
-        {
-            m_tmpDodge = true;
-        }
-        
-        if (m_tmpDodge && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Backward Dodge") && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Forward Dodge"))
-        {
-            Debug.Log(m_tmpTimeBuffer);
-            m_tmpDodge = false;
-        }
-        
+    void HandleDodge(ref float3 movement, ref bool doMovement)
+    {
         if (m_dodgeTimeBuffer < dodgeTimeout)
         {
             m_dodgeTimeBuffer += Time.deltaTime;
             m_animator.SetBool(m_animIDDodge, false);
         }
-        else if (m_grounded && m_input.dodge)
+        else if (m_grounded && m_input.dodge && !m_isAttacking)
         {
             m_input.DodgeInput(false);
 
             m_dodgeDirection = -m_aimDirection;
             m_dodgeTimeBuffer = 0f;
-            m_tmpTimeBuffer = 0f;
             m_animator.SetBool(m_animIDDodge, true);
             m_dodgeSign = math.sign(math.dot(m_dodgeDirection, transform.forward));
             m_animator.SetFloat(m_animIDDodgeDirection, m_dodgeSign);
             transform.forward = m_dodgeDirection * m_dodgeSign;
         }
         
-        float inputMagnitude = m_input.analogMovement ? m_input.move.magnitude : 1f;
-        float3 movement = float3.zero;
         if (m_dodgeTimeBuffer < dodgeTimeout)
         {
             if ((m_dodgeSign > 0f && m_dodgeTimeBuffer < dodgeTime) ||
@@ -198,52 +235,169 @@ public class PlayerController : MonoBehaviour
 
             m_speed = 0f;
             m_animationBlend = 0f;
+            doMovement = false;
+        }
+    }
+    
+    void HandleAttacking(ref float3 movement, ref bool doMovement)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            if (attacks[i].timeBuffer < (attacks[i].duration + attacks[i].cooldown))
+            {
+                attacks[i].timeBuffer += Time.deltaTime;
+            }
+        }
+        
+        if (!m_isAttacking && m_input.changeMask && math.lengthsq(m_aimInput) > math.EPSILON)
+        {
+            float closest = 0f;
+            int closestIndex = -1;
+            for (int i = 0; i < 4; ++i)
+            {
+                if (!attacks[i].unlocked)
+                {
+                    continue;
+                }
+                
+                float distance = math.dot(m_aimInput, attacks[i].selectionDirection);
+                if (distance > closest)
+                {
+                    closest = distance;
+                    closestIndex = i;
+                }
+            }
+
+            m_attackIndex = closestIndex;
+        }
+        
+        if (!doMovement)
+        {
+            return;
+        }
+
+        if (m_attackIndex < 0)
+        {
+            return;
+        }
+
+        AttackInfo currentAttack = attacks[m_attackIndex];
+        float totalAttackTime = currentAttack.duration + currentAttack.cooldown;
+        
+        if (m_input.attack && currentAttack.timeBuffer >= totalAttackTime)
+        {
+            // start attack
+            m_input.AttackInput(false);
+            currentAttack.timeBuffer = 0f;
+            transform.forward = m_aimDirection;
+            m_isAttacking = true;
+        }
+
+        if (currentAttack.timeBuffer > currentAttack.duration)
+        {
+            m_isAttacking = false;
+            return;
+        }
+
+        // update attack
+        switch (m_attackIndex)
+        {
+            case 0:
+            {
+                // Gauntlets
+                movement = float3.zero;
+                break;
+            }
+            case 1:
+            {
+                // Spear
+                movement = m_aimDirection * (currentAttack.movement.z / currentAttack.duration) * Time.deltaTime;
+                break;
+            }
+            case 2:
+            {
+                // Scythe
+                movement = float3.zero;
+                break;
+            }
+            case 3:
+            {
+                // Rifle
+                movement = float3.zero;
+
+                break;
+            }
+        }
+        
+        m_speed = 0f;
+        m_animationBlend = 0f;
+        doMovement = false;
+    }
+    
+    void HandleMovement(ref float3 movement, bool doMovement, float inputMagnitude)
+    {
+        if (!doMovement)
+        {
+            m_targetRotation = math.atan2(movement.x, movement.z);
+            return;
+        }
+
+        float targetSpeed = movementSpeed;
+        if (math.lengthsq(m_input.move) <= math.EPSILON)
+        {
+            targetSpeed = 0.0f;
+        }
+
+        float currentHorizontalSpeed = math.length(new float3(m_controller.velocity.x, 0.0f, m_controller.velocity.z));
+
+        float speedOffset = 0.1f;
+
+        if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
+        {
+            m_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
+                Time.deltaTime * speedChangeRate);
+            m_speed = Mathf.Round(m_speed * 1000f) / 1000f;
         }
         else
         {
-            float targetSpeed = movementSpeed;
-            if (math.lengthsq(m_input.move) <= math.EPSILON)
-            {
-                targetSpeed = 0.0f;
-            }
-
-            float currentHorizontalSpeed = math.length(new float3(m_controller.velocity.x, 0.0f, m_controller.velocity.z));
-
-            float speedOffset = 0.1f;
-
-            if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
-            {
-                m_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                    Time.deltaTime * speedChangeRate);
-                m_speed = Mathf.Round(m_speed * 1000f) / 1000f;
-            }
-            else
-            {
-                m_speed = targetSpeed;
-            }
-
-            m_animationBlend = Mathf.Lerp(m_animationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
-            if (m_animationBlend < 0.01f)
-            {
-                m_animationBlend = 0f;
-            }
-            if (math.lengthsq(m_input.move) > math.EPSILON)
-            {
-                float3 inputDirection = math.normalize(new float3(m_input.move.x, 0.0f, m_input.move.y));
-                m_targetRotation = math.atan2(inputDirection.x, inputDirection.z) +
-                                   math.radians(m_mainCamera.transform.eulerAngles.y);
-
-                float rotation = math.radians(Mathf.SmoothDampAngle(transform.eulerAngles.y,
-                    math.degrees(m_targetRotation),
-                    ref m_rotationVelocity, rotationSmoothTime));
-
-                transform.rotation = quaternion.Euler(0.0f, rotation, 0.0f);
-            }
-
-            movement = math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward()) * m_speed *
-                       Time.deltaTime;
+            m_speed = targetSpeed;
         }
 
+        m_animationBlend = Mathf.Lerp(m_animationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
+        if (m_animationBlend < 0.01f)
+        {
+            m_animationBlend = 0f;
+        }
+
+        if (math.lengthsq(m_input.move) > math.EPSILON)
+        {
+            float3 inputDirection = math.normalize(new float3(m_input.move.x, 0.0f, m_input.move.y));
+            m_targetRotation = math.atan2(inputDirection.x, inputDirection.z) +
+                               math.radians(m_mainCamera.transform.eulerAngles.y);
+
+            float rotation = math.radians(Mathf.SmoothDampAngle(transform.eulerAngles.y,
+                math.degrees(m_targetRotation),
+                ref m_rotationVelocity, rotationSmoothTime));
+
+            transform.rotation = quaternion.Euler(0.0f, rotation, 0.0f);
+        }
+
+        movement = math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward()) * m_speed *
+                   Time.deltaTime;
+    }
+
+    void Update()
+    {
+        bool doMovement = true;
+        HandleAim();
+        HandleFallingAndLanding();
+        
+        float3 movement = float3.zero;
+        float inputMagnitude = m_input.analogMovement ? m_input.move.magnitude : 1f;
+        HandleDodge(ref movement, ref doMovement);
+        HandleAttacking(ref movement, ref doMovement);
+        HandleMovement(ref movement, doMovement, inputMagnitude);
+        
         m_controller.Move(movement  +
                           new float3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
         
@@ -255,6 +409,9 @@ public class PlayerController : MonoBehaviour
     {
         cameraTarget.rotation = m_cameraRotation;
         Shader.SetGlobalVector(m_shaderIDPlayerPosition, cameraTarget.position);
+        
+        Shader.SetGlobalColor(m_shaderIDPlayerWeapon, m_attackIndex >= 0 ? attacks[m_attackIndex].color : Color.white);
+        Shader.SetGlobalFloat(m_shaderIDPlayerWeaponFill, m_attackIndex >= 0 ? attacks[m_attackIndex].timeBuffer / (attacks[m_attackIndex].duration + attacks[m_attackIndex].cooldown) : 0f);
     }
 
     private void OnFootstep(AnimationEvent animationEvent)
