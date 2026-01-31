@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     [Header("Misc")]
     public Transform cameraTarget;
     public Transform aimVisual;
+    public MeshRenderer attackPreview;
 
     private float m_speed;
     private float m_animationBlend;
@@ -69,6 +70,7 @@ public class PlayerController : MonoBehaviour
     private float m_dodgeSign;
 
     private bool m_isAttacking;
+    private bool m_attackPreview;
     private int m_attackIndex = -1;
     
     private int m_animIDSpeed;
@@ -81,6 +83,12 @@ public class PlayerController : MonoBehaviour
     private int m_shaderIDPlayerPosition;
     private int m_shaderIDPlayerWeapon;
     private int m_shaderIDPlayerWeaponFill;
+    
+    private int m_shaderIDPreviewColor;
+    private int m_shaderIDPreviewIsCircle;
+    private int m_shaderIDPreviewFill;
+    private int m_shaderIDPreviewUseArrow;
+    private int m_shaderIDPreviewRadius;
 
     private PlayerInput m_playerInput;
 
@@ -123,6 +131,12 @@ public class PlayerController : MonoBehaviour
         m_shaderIDPlayerPosition = Shader.PropertyToID("_Player_Position");
         m_shaderIDPlayerWeapon = Shader.PropertyToID("_CurrentWeaponColor");
         m_shaderIDPlayerWeaponFill = Shader.PropertyToID("_CurrentWeaponFill");
+        
+        m_shaderIDPreviewColor = Shader.PropertyToID("_Color");
+        m_shaderIDPreviewIsCircle = Shader.PropertyToID("_Is_Circle");
+        m_shaderIDPreviewFill = Shader.PropertyToID("_Fill");
+        m_shaderIDPreviewUseArrow = Shader.PropertyToID("_Use_Arrow");
+        m_shaderIDPreviewRadius = Shader.PropertyToID("_Cone_Radius");
         
         m_fallTimeBuffer = 0f;
         
@@ -286,11 +300,69 @@ public class PlayerController : MonoBehaviour
         
         if (m_input.attack && currentAttack.timeBuffer >= totalAttackTime)
         {
-            // start attack
-            m_input.AttackInput(false);
-            currentAttack.timeBuffer = 0f;
-            transform.forward = m_aimDirection;
-            m_isAttacking = true;
+            m_attackPreview = true;
+            attackPreview.gameObject.SetActive(true);
+        }
+
+        if (m_attackPreview)
+        {
+            attackPreview.material.SetColor(m_shaderIDPreviewColor, currentAttack.color);
+            attackPreview.transform.forward = m_aimDirection;
+            switch (m_attackIndex)
+            {
+                case 0:
+                {
+                    // Gauntlets
+                    attackPreview.material.SetFloat(m_shaderIDPreviewIsCircle, 1f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewFill, 1f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 0f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewRadius, currentAttack.aoe.x);
+                    attackPreview.transform.localScale = new float3(currentAttack.aoe.y * 0.5f);
+                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.value0 + new float3(0f, 0.1f, 0f);
+                    break;
+                }
+                case 1:
+                {
+                    // Spear
+                    attackPreview.material.SetFloat(m_shaderIDPreviewIsCircle, 0f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewFill, 1f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 1f);
+                    attackPreview.transform.localScale = new float3(currentAttack.aoe.x, 1f, currentAttack.aoe.y) * 0.5f;
+                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.aoe.y * 0.5f + new float3(0f, 0.1f, 0f);
+                    break;
+                }
+                case 2:
+                {
+                    // Scythe
+                    attackPreview.material.SetFloat(m_shaderIDPreviewIsCircle, 1f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewFill, 1f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 0f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewRadius, currentAttack.aoe.x);
+                    attackPreview.transform.localScale = new float3(currentAttack.aoe.y * 0.5f);
+                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.value0 + new float3(0f, 0.1f, 0f);
+                    break;
+                }
+                case 3:
+                {
+                    // Rifle
+                    attackPreview.material.SetFloat(m_shaderIDPreviewIsCircle, 0f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewFill, 1f);
+                    attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 0f);
+                    attackPreview.transform.localScale = new float3(currentAttack.aoe.x, 1f, currentAttack.aoe.y) * 0.5f;
+                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.aoe.y * 0.5f + new float3(0f, 0.1f, 0f);
+                    break;
+                }
+            }
+            
+            if (!m_input.attack)
+            {
+                // start attack
+                currentAttack.timeBuffer = 0f;
+                transform.forward = m_aimDirection;
+                m_isAttacking = true;
+                m_attackPreview = false;
+                attackPreview.gameObject.SetActive(false);
+            }
         }
 
         if (currentAttack.timeBuffer > currentAttack.duration)
