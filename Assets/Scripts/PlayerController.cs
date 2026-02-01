@@ -15,6 +15,7 @@ public class AttackInfo
     public float value0;
     public float2 selectionDirection = new float2(0f, 1f);
     public Color color = new Color(0.5f, 0f, 1f);
+    public GameObject selectionVisual;
     [HideInInspector]
     public bool unlocked = false;
     [HideInInspector]
@@ -55,6 +56,8 @@ public class PlayerController : MonoBehaviour
     public MeshRenderer aimRenderer;
     public Transform aimSelect;
     public MeshRenderer attackPreview;
+
+    public MaskPedestal interactingPedestal { get; set; }
 
     private float m_speed;
     private float m_animationBlend;
@@ -155,7 +158,6 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < 4; ++i)
         {
             attacks[i].selectionDirection = math.normalize(attacks[i].selectionDirection);
-            attacks[i].unlocked = true;
             attacks[i].timeBuffer = attacks[i].duration + attacks[i].cooldown;
         }
     }
@@ -302,6 +304,17 @@ public class PlayerController : MonoBehaviour
         
         if (!doMovement)
         {
+            return;
+        }
+
+        if (interactingPedestal is not null)
+        {
+            if (m_input.attack)
+            {
+                attacks[interactingPedestal.maskIndex].unlocked = true;
+                attacks[interactingPedestal.maskIndex].selectionVisual.SetActive(true);
+                m_attackIndex =  interactingPedestal.maskIndex;
+            }
             return;
         }
 

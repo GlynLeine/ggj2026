@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7782515230398569502
 Transform:
   m_ObjectHideFlags: 0
@@ -197,7 +197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1066484075656739273
 Transform:
   m_ObjectHideFlags: 0
@@ -322,7 +322,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8856572079313332324
 Transform:
   m_ObjectHideFlags: 0
@@ -570,6 +570,7 @@ MonoBehaviour:
       x: 0
       y: 1
     color: {r: 0.013572444, g: 0.5754717, b: 0.013572444, a: 1}
+    selectionVisual: {fileID: 1047649318555080814}
     unlocked: 0
     timeBuffer: 0
   - duration: 0.4
@@ -587,6 +588,7 @@ MonoBehaviour:
       x: 1
       y: 0
     color: {r: 1, g: 0.711, b: 0, a: 1}
+    selectionVisual: {fileID: 2404920985324413655}
     unlocked: 0
     timeBuffer: 0
   - duration: 0.2
@@ -604,6 +606,7 @@ MonoBehaviour:
       x: 0
       y: -1
     color: {r: 1, g: 0.17174745, b: 0, a: 1}
+    selectionVisual: {fileID: 8394544983001474625}
     unlocked: 0
     timeBuffer: 0
   - duration: 1
@@ -621,6 +624,7 @@ MonoBehaviour:
       x: -1
       y: 0
     color: {r: 0.058823522, g: 0.70112956, b: 0.83137256, a: 1}
+    selectionVisual: {fileID: 3842924706188920721}
     unlocked: 0
     timeBuffer: 0
   cameraTarget: {fileID: 83034259623819942}
@@ -787,7 +791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1726185081207894657
 Transform:
   m_ObjectHideFlags: 0
