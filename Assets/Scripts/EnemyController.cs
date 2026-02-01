@@ -14,4 +14,9 @@ public class EnemyController : GameCharacterController
         m_attackIndex = (int)brain!.weaponType;
         brain.attackInfo = attacks[m_attackIndex];
     }
+
+    protected override void OnDeath()
+    {
+        Destroy(gameObject);
+    }
 }

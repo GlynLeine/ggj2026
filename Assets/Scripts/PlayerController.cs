@@ -4,6 +4,7 @@ using Unity.Mathematics;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : GameCharacterController
 {
+    [Header("Player Specific")]
     public Transform cameraTarget;
     public Transform aimVisual;
     public MeshRenderer aimRenderer;
@@ -108,13 +109,14 @@ public class PlayerController : GameCharacterController
             aimSelect.gameObject.SetActive(false);
         }
 
-        if (doMovement && interactingPedestal is not null)
+        if (doMovement && interactingPedestal is not null && !attacks[interactingPedestal.maskIndex].unlocked)
         {
             if (m_input.attack)
             {
                 attacks[interactingPedestal.maskIndex].unlocked = true;
                 attacks[interactingPedestal.maskIndex].selectionVisual.SetActive(true);
                 m_attackIndex =  interactingPedestal.maskIndex;
+                attacks[interactingPedestal.maskIndex].timeBuffer = attacks[interactingPedestal.maskIndex].duration;
             }
 
             return false;
@@ -136,5 +138,10 @@ public class PlayerController : GameCharacterController
         
         aimRenderer.material.SetColor(m_shaderIDPlayerWeapon, m_attackIndex >= 0 ? attacks[m_attackIndex].color : Color.white);
         aimRenderer.material.SetFloat(m_shaderIDPlayerWeaponFill, m_attackIndex >= 0 ? attacks[m_attackIndex].timeBuffer / (attacks[m_attackIndex].duration + attacks[m_attackIndex].cooldown) : 0f);
+    }
+
+    protected override void OnDeath()
+    {
+        Destroy(gameObject);
     }
 }

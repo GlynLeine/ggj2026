@@ -466,6 +466,7 @@ Transform:
   - {fileID: 1533360172908954203}
   - {fileID: 7150035367903228421}
   - {fileID: 7675340773209281714}
+  - {fileID: 4632810526180769679}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1953784154354638781
@@ -554,6 +555,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 129
   landingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
+  maxHealth: 100
+  attackPreview: {fileID: 8053789333969817757}
   attacks:
   - duration: 0.1
     cooldown: 0.15
@@ -561,6 +564,7 @@ MonoBehaviour:
       x: 90
       y: 2
     damage: 1
+    knockbackForce: 1
     movement:
       x: 0
       y: 0
@@ -571,6 +575,7 @@ MonoBehaviour:
       y: 1
     color: {r: 0.013572444, g: 0.5754717, b: 0.013572444, a: 1}
     selectionVisual: {fileID: 1047649318555080814}
+    weaponCollider: {fileID: 1482681110394364168}
     unlocked: 0
     timeBuffer: 0
   - duration: 0.4
@@ -578,17 +583,19 @@ MonoBehaviour:
     aoe:
       x: 1
       y: 4
-    damage: 1
+    damage: 6
+    knockbackForce: 7.5
     movement:
       x: 0
       y: 0
-      z: 3
+      z: 2.5
     value0: 0
     selectionDirection:
       x: 1
       y: 0
     color: {r: 1, g: 0.711, b: 0, a: 1}
     selectionVisual: {fileID: 2404920985324413655}
+    weaponCollider: {fileID: 2942591964644222951}
     unlocked: 0
     timeBuffer: 0
   - duration: 0.2
@@ -596,7 +603,8 @@ MonoBehaviour:
     aoe:
       x: 120
       y: 4
-    damage: 1
+    damage: 2.5
+    knockbackForce: 3.5
     movement:
       x: 0
       y: 0
@@ -607,6 +615,7 @@ MonoBehaviour:
       y: -1
     color: {r: 1, g: 0.17174745, b: 0, a: 1}
     selectionVisual: {fileID: 8394544983001474625}
+    weaponCollider: {fileID: 5953648050449812819}
     unlocked: 0
     timeBuffer: 0
   - duration: 1
@@ -614,7 +623,8 @@ MonoBehaviour:
     aoe:
       x: 1
       y: 10
-    damage: 1
+    damage: 12.5
+    knockbackForce: 7.5
     movement:
       x: 0
       y: 0
@@ -625,9 +635,9 @@ MonoBehaviour:
       y: 0
     color: {r: 0.058823522, g: 0.70112956, b: 0.83137256, a: 1}
     selectionVisual: {fileID: 3842924706188920721}
+    weaponCollider: {fileID: 7022088688153984858}
     unlocked: 0
     timeBuffer: 0
-  attackPreview: {fileID: 8053789333969817757}
   cameraTarget: {fileID: 83034259623819942}
   aimVisual: {fileID: 1533360172908954203}
   aimRenderer: {fileID: 9179407917630550519}
@@ -1019,4 +1029,86 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dccc737097d08004b9acd6b9458e5c2e, type: 3}
   m_PrefabInstance: {fileID: 176225478568369213}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5887675045656961958
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9201438970193530504}
+    m_Modifications:
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4640270172380144351, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+      propertyPath: m_Name
+      value: AttackColliders
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+--- !u!1 &1482681110394364168 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4982867811403317934, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+  m_PrefabInstance: {fileID: 5887675045656961958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2942591964644222951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8746859707451900993, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+  m_PrefabInstance: {fileID: 5887675045656961958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4632810526180769679 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1296532988546341929, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+  m_PrefabInstance: {fileID: 5887675045656961958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5953648050449812819 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 228172960158101237, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+  m_PrefabInstance: {fileID: 5887675045656961958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7022088688153984858 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3514568266102365436, guid: b969e75b51ec0c9438bb6ff3c4e5a8b4, type: 3}
+  m_PrefabInstance: {fileID: 5887675045656961958}
   m_PrefabAsset: {fileID: 0}

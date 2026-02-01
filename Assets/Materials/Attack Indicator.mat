@@ -52,9 +52,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Cone_Radius: 76.7
+    - _Cone_Radius: 120
     - _Fill: 1
-    - _Is_Circle: 1
+    - _Is_Circle: 0
     - _QueueControl: 1
     - _QueueOffset: 0
     - _Use_Arrow: 0

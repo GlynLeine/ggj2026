@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 using Random = Unity.Mathematics.Random;
@@ -9,11 +10,13 @@ public class AttackInfo
     public float cooldown = 2f;
     public float2 aoe = new float2(1f, 1f);
     public float damage = 1f;
+    public float knockbackForce = 1f;
     public float3 movement = new float3(0f, 0f, 0f);
     public float value0;
     public float2 selectionDirection = new float2(0f, 1f);
     public Color color = new Color(0.5f, 0f, 1f);
     public GameObject selectionVisual;
+    public GameObject weaponCollider;
     [HideInInspector]
     public bool unlocked = false;
     [HideInInspector]
@@ -44,11 +47,12 @@ public abstract class GameCharacterController : MonoBehaviour
     public LayerMask groundLayers;
     public AudioClip landingAudioClip;
 
-    [Space(10)]
+    [Header("Attacks")]
+    public float maxHealth;
+    public MeshRenderer attackPreview;
     public AttackInfo[] attacks;
 
-    [Header("Misc")]
-    public MeshRenderer attackPreview;
+    protected float m_health;
     
     protected float m_speed;
     protected float m_animationBlend;
@@ -56,15 +60,19 @@ public abstract class GameCharacterController : MonoBehaviour
     protected float m_rotationVelocity;
     protected float m_verticalVelocity;
     protected readonly float m_terminalVelocity = 53.0f;
+    protected float3 m_knockbackVelocity;
 
     protected bool m_grounded = true;
     protected float m_dodgeTimeBuffer;
     protected float m_fallTimeBuffer;
 
+    protected float3 m_attackOrigin;
     protected float3 m_aimDirection = math.forward();
     protected float2 m_aimInput;
     protected float3 m_dodgeDirection;
     protected float m_dodgeSign;
+    protected HashSet<EntityId> m_attackedCharacters = new HashSet<EntityId>();
+    protected TagHandle m_tag;
 
     protected bool m_isAttacking;
     protected bool m_attackPreview;
@@ -100,6 +108,7 @@ public abstract class GameCharacterController : MonoBehaviour
         m_animator = GetComponent<Animator>();
         m_controller = GetComponent<CharacterController>();
         m_input = GetComponent<InputDriver>();
+        m_tag = TagHandle.GetExistingTag(gameObject.tag);
         
         Debug.Assert(m_input is not null);
 
@@ -119,6 +128,7 @@ public abstract class GameCharacterController : MonoBehaviour
         m_characterCollisionLayer = LayerMask.NameToLayer("Character");
         
         m_fallTimeBuffer = 0f;
+        m_health = maxHealth;
         
         OnStart();
         
@@ -127,6 +137,7 @@ public abstract class GameCharacterController : MonoBehaviour
         foreach (AttackInfo attack in attacks)
         {
             attack.timeBuffer = attack.duration + attack.cooldown;
+            attack.weaponCollider.GetComponent<WeaponCollider>().characterController = this;
         }
     }
 
@@ -233,6 +244,81 @@ public abstract class GameCharacterController : MonoBehaviour
         }
     }
 
+    public virtual void OnAttackHit(GameCharacterController otherCharacter)
+    {
+        if (m_attackIndex < 0)
+        {
+            return;
+        }
+
+        if (otherCharacter.CompareTag(m_tag))
+        {
+            return;
+        }
+
+        if (!m_attackedCharacters.Add(otherCharacter.GetEntityId()))
+        {
+            return;
+        }
+        
+        otherCharacter.Hurt(attacks[m_attackIndex].damage);
+
+        float3 otherCharacterDirection = otherCharacter.transform.position - transform.position;
+        otherCharacterDirection.y = 0f;
+        otherCharacterDirection = math.normalizesafe(otherCharacterDirection, m_aimDirection);
+        
+        // update attack
+        switch (m_attackIndex)
+        {
+            case 0:
+            {
+                // Gauntlets
+                otherCharacter.GetKnockback(otherCharacterDirection * attacks[m_attackIndex].knockbackForce);
+                break;
+            }
+            case 1:
+            {
+                // Spear
+                otherCharacter.GetKnockback((m_aimDirection + otherCharacterDirection) * 0.5f * attacks[m_attackIndex].knockbackForce);
+                break;
+            }
+            case 2:
+            {
+                // Scythe
+                otherCharacter.GetKnockback(otherCharacterDirection * attacks[m_attackIndex].knockbackForce);
+                break;
+            }
+            case 3:
+            {
+                // Rifle
+                otherCharacter.GetKnockback((m_aimDirection + otherCharacterDirection) * 0.5f * attacks[m_attackIndex].knockbackForce);
+                break;
+            }
+        }
+    }
+
+    public void GetKnockback(float3 force)
+    {
+        m_knockbackVelocity += force * 4f;
+        Debug.Log(m_knockbackVelocity);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        WeaponCollider weaponCollider = other.transform.parent.GetComponent<WeaponCollider>();
+        if (weaponCollider is null || weaponCollider.characterController == this)
+        {
+            return;
+        }
+
+        weaponCollider.characterController.OnAttackHit(this);
+    }
+
+    public void Hurt(float damage)
+    {
+        m_health -= damage;
+    }
+    
     protected virtual bool OnHandleAttacking(ref float3 movement, ref bool doMovement) { return true; }
     
     void HandleAttacking(ref float3 movement, ref bool doMovement)
@@ -266,6 +352,11 @@ public abstract class GameCharacterController : MonoBehaviour
 
         if (m_attackPreview)
         {
+            if (!m_isAttacking)
+            {
+                m_attackOrigin = transform.position;
+            }
+            
             attackPreview.material.SetColor(m_shaderIDPreviewColor, currentAttack.color);
             attackPreview.transform.forward = m_aimDirection;
             switch (m_attackIndex)
@@ -278,7 +369,7 @@ public abstract class GameCharacterController : MonoBehaviour
                     attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 0f);
                     attackPreview.material.SetFloat(m_shaderIDPreviewRadius, currentAttack.aoe.x);
                     attackPreview.transform.localScale = new float3(currentAttack.aoe.y);
-                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.value0 + new float3(0f, 0.05f, 0f);
+                    attackPreview.transform.position = m_attackOrigin + m_aimDirection * currentAttack.value0 + new float3(0f, 0.05f, 0f);
                     break;
                 }
                 case 1:
@@ -288,7 +379,7 @@ public abstract class GameCharacterController : MonoBehaviour
                     attackPreview.material.SetFloat(m_shaderIDPreviewFill, 1f);
                     attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 1f);
                     attackPreview.transform.localScale = new float3(currentAttack.aoe.x, 1f, currentAttack.aoe.y) * 0.5f;
-                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.aoe.y * 0.5f + new float3(0f, 0.05f, 0f);
+                    attackPreview.transform.position = m_attackOrigin + m_aimDirection * currentAttack.aoe.y * 0.5f + new float3(0f, 0.05f, 0f);
                     break;
                 }
                 case 2:
@@ -299,7 +390,7 @@ public abstract class GameCharacterController : MonoBehaviour
                     attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 0f);
                     attackPreview.material.SetFloat(m_shaderIDPreviewRadius, currentAttack.aoe.x);
                     attackPreview.transform.localScale = new float3(currentAttack.aoe.y);
-                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.value0 + new float3(0f, 0.05f, 0f);
+                    attackPreview.transform.position = m_attackOrigin + m_aimDirection * currentAttack.value0 + new float3(0f, 0.05f, 0f);
                     break;
                 }
                 case 3:
@@ -309,26 +400,33 @@ public abstract class GameCharacterController : MonoBehaviour
                     attackPreview.material.SetFloat(m_shaderIDPreviewFill, 1f);
                     attackPreview.material.SetFloat(m_shaderIDPreviewUseArrow, 0f);
                     attackPreview.transform.localScale = new float3(currentAttack.aoe.x, 1f, currentAttack.aoe.y) * 0.5f;
-                    attackPreview.transform.position = new float3(transform.position) + m_aimDirection * currentAttack.aoe.y * 0.5f + new float3(0f, 0.05f, 0f);
+                    attackPreview.transform.position = m_attackOrigin + m_aimDirection * currentAttack.aoe.y * 0.5f + new float3(0f, 0.05f, 0f);
                     break;
                 }
             }
             
-            if (!m_input.attack)
+            if (!m_input.attack && !m_isAttacking)
             {
                 // start attack
                 currentAttack.timeBuffer = 0f;
                 transform.forward = m_aimDirection;
                 m_isAttacking = true;
-                m_attackPreview = false;
-                attackPreview.gameObject.SetActive(false);
+                currentAttack.weaponCollider.SetActive(true);
             }
         }
 
         if (currentAttack.timeBuffer > currentAttack.duration)
         {
-            m_isAttacking = false;
-            Physics.IgnoreLayerCollision(m_characterCollisionLayer, m_characterCollisionLayer, false);
+            if (m_isAttacking)
+            {
+                m_attackPreview = false;
+                attackPreview.gameObject.SetActive(false);
+                m_isAttacking = false;
+                currentAttack.weaponCollider.SetActive(false);
+                m_attackedCharacters.Clear();
+                Physics.IgnoreLayerCollision(m_characterCollisionLayer, m_characterCollisionLayer, false);
+            }
+
             return;
         }
 
@@ -358,7 +456,6 @@ public abstract class GameCharacterController : MonoBehaviour
             {
                 // Rifle
                 movement = float3.zero;
-
                 break;
             }
         }
@@ -389,6 +486,8 @@ public abstract class GameCharacterController : MonoBehaviour
         }
 
         float currentHorizontalSpeed = math.length(new float3(m_controller.velocity.x, 0.0f, m_controller.velocity.z));
+        float knockbackSpeed = math.length(m_knockbackVelocity);
+        currentHorizontalSpeed = math.max(0f, currentHorizontalSpeed - knockbackSpeed);
 
         float speedOffset = 0.1f;
 
@@ -420,10 +519,17 @@ public abstract class GameCharacterController : MonoBehaviour
             transform.rotation = quaternion.Euler(0.0f, rotation, 0.0f);
         }
 
-        movement = math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward()) * m_speed *
+        movement += math.mul(quaternion.Euler(0.0f, m_targetRotation, 0.0f), math.forward()) * m_speed *
                    Time.deltaTime;
     }
 
+    private void FixedUpdate()
+    {
+        m_knockbackVelocity *= 0.75f;
+    }
+
+    protected abstract void OnDeath();
+    
     void Update()
     {
         bool doMovement = true;
@@ -435,12 +541,18 @@ public abstract class GameCharacterController : MonoBehaviour
         HandleDodge(ref movement, ref doMovement);
         HandleAttacking(ref movement, ref doMovement);
         HandleMovement(ref movement, doMovement, inputMagnitude);
+
+        movement += new float3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime + m_knockbackVelocity * Time.deltaTime;
         
-        m_controller.Move(movement  +
-                          new float3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
+        m_controller.Move(movement);
         
         m_animator.SetFloat(m_animIDSpeed, m_animationBlend);
         m_animator.SetFloat(m_animIDMotionSpeed, inputMagnitude);
+
+        if (m_health <= 0f)
+        {
+            OnDeath();
+        }
     }
 
     protected void OnFootstep(AnimationEvent animationEvent)

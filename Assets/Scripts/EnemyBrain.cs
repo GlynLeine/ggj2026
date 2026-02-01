@@ -28,6 +28,11 @@ public class EnemyBrain : InputDriver
 
     private void Update()
     {
+        if (!m_player)
+        {
+            return;
+        }
+        
         float2 movementInput = float2.zero;
         float3 toPlayer = m_player.transform.position - transform.position;
         float2 toPlayer2D = new float2(toPlayer.x, toPlayer.z);
