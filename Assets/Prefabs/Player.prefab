@@ -117,7 +117,7 @@ Transform:
   m_GameObject: {fileID: 2138756731749150539}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -627,11 +627,11 @@ MonoBehaviour:
     selectionVisual: {fileID: 3842924706188920721}
     unlocked: 0
     timeBuffer: 0
+  attackPreview: {fileID: 8053789333969817757}
   cameraTarget: {fileID: 83034259623819942}
   aimVisual: {fileID: 1533360172908954203}
   aimRenderer: {fileID: 9179407917630550519}
   aimSelect: {fileID: 7675340773209281714}
-  attackPreview: {fileID: 8053789333969817757}
 --- !u!114 &3938525429208712838
 MonoBehaviour:
   m_ObjectHideFlags: 0

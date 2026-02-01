@@ -15,7 +15,7 @@ TagManager:
   - UI
   - 
   - CollideCamera
-  - Player
+  - Character
   - SubmitScreen
   - 
   - 

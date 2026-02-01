@@ -1,19 +1,20 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerCharacterInput : MonoBehaviour
+[RequireComponent(typeof(PlayerInput))]
+public class PlayerCharacterInput : InputDriver
 {
-    public Vector2 move { get; private set; }
-    public Vector2 aimInput { get; private set; }
-    public bool changeMask { get; private set; }
-    public bool dodge { get; private set; }
-    public bool attack { get; private set; }
-
-    public bool analogMovement;
-
     public bool cursorLocked { get; private set; } = false;
     public bool cursorInputLocked { get; private set; } = true;
+    
+    private PlayerInput m_playerInput;
+
+    public override bool isCurrentDeviceMouse => m_playerInput.currentControlScheme == "Keyboard&Mouse";
+
+    private void Awake()
+    {
+        m_playerInput = GetComponent<PlayerInput>();
+    }
 
     public void OnMove(InputValue value)
     {
@@ -24,7 +25,7 @@ public class PlayerCharacterInput : MonoBehaviour
     {
         if(cursorInputLocked)
         {
-            CursorInput(value.Get<Vector2>());
+            AimInput(value.Get<Vector2>());
         }
     }
 
@@ -41,31 +42,6 @@ public class PlayerCharacterInput : MonoBehaviour
     public void OnAttack(InputValue value)
     {
         AttackInput(value.isPressed);
-    }
-
-    public void MoveInput(Vector2 newMoveDirection)
-    {
-        move = newMoveDirection;
-    } 
-
-    public void CursorInput(Vector2 newLookDirection)
-    {
-        aimInput = newLookDirection;
-    }
-
-    public void ChangeMaskInput(bool newChangeMask)
-    {
-        changeMask = newChangeMask;
-    }
-    
-    public void DodgeInput(bool newDodgeState)
-    {
-        dodge = newDodgeState;
-    }
-
-    public void AttackInput(bool newAttackState)
-    {
-        attack = newAttackState;
     }
 		
     private void OnApplicationFocus(bool hasFocus)
