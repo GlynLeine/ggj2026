@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9006155323871733372}
   m_Layer: 0
-  m_Name: Azteca - Summer - Gauntlets
+  m_Name: Greece - Summer - Spear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,7 +165,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
+      objectReference: {fileID: 2100000, guid: e7feb3f9b41fa204f9032ab171d5b3df, type: 2}
     - target: {fileID: 919132149155446097, guid: d17d96798477d1446b404cf100d0d8ba, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_04_Atlased
@@ -261,7 +261,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 802af55debcf0e44fbf19ae66525c237, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: dbf898c9f9c4a2d46aa6336e23caeb61, type: 2}
+      objectReference: {fileID: 2100000, guid: e7feb3f9b41fa204f9032ab171d5b3df, type: 2}
     - target: {fileID: 919132149155446097, guid: 802af55debcf0e44fbf19ae66525c237, type: 3}
       propertyPath: m_Name
       value: Prop_Jungle_Temple_Ornament_Half_Sun_Spikes_Gold_01_Atlased
@@ -339,7 +339,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
+      objectReference: {fileID: 2100000, guid: e7feb3f9b41fa204f9032ab171d5b3df, type: 2}
     - target: {fileID: 919132149155446097, guid: e1032fdd8fc52a340ad85ab3141fe620, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_02_Atlased
@@ -447,7 +447,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
+      objectReference: {fileID: 2100000, guid: e7feb3f9b41fa204f9032ab171d5b3df, type: 2}
     - target: {fileID: 919132149155446097, guid: 66b578fb776b7914e969cc7932700cb6, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_01_Atlased
@@ -642,7 +642,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
+      objectReference: {fileID: 2100000, guid: e7feb3f9b41fa204f9032ab171d5b3df, type: 2}
     - target: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
       propertyPath: m_Name
       value: Prop_Jungle_Temple_Pillar_Block_Markings_01_Atlased
@@ -816,7 +816,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
+      objectReference: {fileID: 2100000, guid: e7feb3f9b41fa204f9032ab171d5b3df, type: 2}
     - target: {fileID: 919132149155446097, guid: 07a378af431b3eb4bab53281d0b4693a, type: 3}
       propertyPath: m_Name
       value: Prop_Jungle_Temple_Pillar_Block_Markings_01_Atlased (1)
@@ -924,7 +924,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 1f8a9fab98770dc4b98c10c9467cf74d, type: 2}
+      objectReference: {fileID: 2100000, guid: e7feb3f9b41fa204f9032ab171d5b3df, type: 2}
     - target: {fileID: 919132149155446097, guid: 670c8a0a5716088419d8a46421ab2d91, type: 3}
       propertyPath: m_Name
       value: Prop_Ruins_Colosseum_Chunk_03_Atlased
