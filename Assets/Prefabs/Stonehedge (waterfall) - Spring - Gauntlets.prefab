@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -5875144301323296478, guid: 94b9960d9d2a69844b517c5a052653ee, type: 3}
+  - {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -179,7 +179,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -5875144301323296478, guid: 94b9960d9d2a69844b517c5a052653ee, type: 3}
+  - {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -358,6 +358,7 @@ Transform:
   - {fileID: 1303034737382527192}
   - {fileID: 603971353309939832}
   - {fileID: 767405867187486229}
+  - {fileID: 5062814303064794217}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &8644339835129977884
@@ -378,7 +379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3655614099008729401
 Transform:
   m_ObjectHideFlags: 0
@@ -539,7 +540,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -5875144301323296478, guid: 94b9960d9d2a69844b517c5a052653ee, type: 3}
+  - {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2970,6 +2971,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SW_Water_Plane_Rectangle_Large_01
       objectReference: {fileID: 0}
+    - target: {fileID: 8076084240599768756, guid: 56040f06b11bd1d408bcc832ad27e3c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4340,6 +4345,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SW_Water_Plane_Rectangle_Large_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8076084240599768756, guid: 56040f06b11bd1d408bcc832ad27e3c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5218,6 +5227,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SW_Water_Plane_Rectangle_Large_01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8076084240599768756, guid: 56040f06b11bd1d408bcc832ad27e3c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6668,7 +6681,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6944320893460653531, guid: 56040f06b11bd1d408bcc832ad27e3c1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.48
+      value: 1.04
       objectReference: {fileID: 0}
     - target: {fileID: 6944320893460653531, guid: 56040f06b11bd1d408bcc832ad27e3c1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -6710,6 +6723,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SW_Water_Plane_Rectangle_Large_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8076084240599768756, guid: 56040f06b11bd1d408bcc832ad27e3c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7104,6 +7121,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2008087672825338624, guid: e5cd55051ee7c8b4ea7d9c522aa112f7, type: 3}
   m_PrefabInstance: {fileID: 8699027003156463893}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8872429574065622503
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4447433382150369039}
+    m_Modifications:
+    - target: {fileID: 2792353110084104062, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_Name
+      value: Spring Mask Pedestal
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7070719
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071417
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+--- !u!4 &5062814303064794217 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4423530409127291278, guid: af717f50e8ab8464e9fb440c857e52a3, type: 3}
+  m_PrefabInstance: {fileID: 8872429574065622503}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8994449413406590113
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7218,6 +7297,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SW_Water_Plane_Rectangle_Large_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8076084240599768756, guid: 56040f06b11bd1d408bcc832ad27e3c1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
