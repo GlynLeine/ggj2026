@@ -300,7 +300,6 @@ public abstract class GameCharacterController : MonoBehaviour
     public void GetKnockback(float3 force)
     {
         m_knockbackVelocity += force * 4f;
-        Debug.Log(m_knockbackVelocity);
     }
 
     public void OnTriggerEnter(Collider other)
@@ -355,8 +354,17 @@ public abstract class GameCharacterController : MonoBehaviour
             if (!m_isAttacking)
             {
                 m_attackOrigin = transform.position;
+                
+                if (!m_input.attack)
+                {
+                    // start attack
+                    currentAttack.timeBuffer = 0f;
+                    transform.forward = m_aimDirection;
+                    m_isAttacking = true;
+                    currentAttack.weaponCollider.SetActive(true);
+                }
             }
-            
+
             attackPreview.material.SetColor(m_shaderIDPreviewColor, currentAttack.color);
             attackPreview.transform.forward = m_aimDirection;
             switch (m_attackIndex)
@@ -403,15 +411,6 @@ public abstract class GameCharacterController : MonoBehaviour
                     attackPreview.transform.position = m_attackOrigin + m_aimDirection * currentAttack.aoe.y * 0.5f + new float3(0f, 0.05f, 0f);
                     break;
                 }
-            }
-            
-            if (!m_input.attack && !m_isAttacking)
-            {
-                // start attack
-                currentAttack.timeBuffer = 0f;
-                transform.forward = m_aimDirection;
-                m_isAttacking = true;
-                currentAttack.weaponCollider.SetActive(true);
             }
         }
 
