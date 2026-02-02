@@ -17,7 +17,7 @@ public class MaskPedestal : MonoBehaviour
 
     void Update()
     {
-        if (m_player.interactingPedestal is not null && m_player.interactingPedestal != this)
+        if (!m_player || (m_player.interactingPedestal is not null && m_player.interactingPedestal != this))
         {
             return;
         }
